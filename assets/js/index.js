@@ -20,8 +20,11 @@ div.appendChild(inputResult);
 //Task 1
 
 input.addEventListener("input", (event) => {
+  if (isNaN(event.target.value)) {
+    console.error("Input should be an integer value!");
+  }
   if (event.target.value < 0) {
-    return;
+    console.error("Your input is less than zero!");
   }
 
   if (event.target.value === "") {
@@ -42,18 +45,17 @@ function addClass() {
 function removeCalss() {
   elem.classList.remove("www");
   elem.removeAttribute("class");
-  console.dir(elem);
 }
 
 function hasClass() {
-  return elem.className === "www";
+  return elem.classList.contains("www");
 }
 
 function addOrRemoveClass() {
   if (hasClass()) {
-    removeCalss();
+    elem.classList.toggle("www");
   } else {
-    addClass();
+    elem.classList.toggle("www");
   }
 }
 
@@ -65,51 +67,48 @@ const array = [
   { id: 3, title: "third", description: "text3" },
 ];
 
-array.forEach((element) => {
-  const li = document.createElement("li");
+array.map(function (item) {
   const deleteButton = document.createElement("input");
+  const h1 = document.createElement("h1");
+  const p = document.createElement("p");
+  const li = document.createElement("li");
+  li.classList.add("liPinkColor");
 
+  ul.appendChild(li);
+
+  liColorHandler(li);
+  liTextHandler(li, item, h1, p);
+  liButtonHandler(li, deleteButton);
+  deleteButtonHandler(deleteButton, li);
+});
+
+function liColorHandler(li) {
+  li.addEventListener("click", () => {
+    li.classList.toggle("liLightBlueColor");
+  });
+}
+
+function liButtonHandler(li, deleteButton) {
   deleteButton.setAttribute("type", "button");
   deleteButton.setAttribute("value", "delete");
   deleteButton.setAttribute("class", "deleteButton");
 
-  const h1 = document.createElement("h1");
-  const p = document.createElement("p");
+  li.appendChild(deleteButton);
+}
 
-  h1.textContent = element.title;
-  p.textContent = element.description;
+function liTextHandler(li, item, h1, p) {
+  h1.textContent = item.title;
+  p.textContent = item.description;
 
-  ul.appendChild(li);
   li.appendChild(h1);
   li.appendChild(p);
-  li.appendChild(deleteButton);
-});
-
-const li = document.querySelectorAll("li");
-const deleteButton = document.querySelectorAll(".deleteButton");
-
-deleteButton.forEach((button) => {
-  button.addEventListener("click", deleteButtonHandler);
-});
-
-li.forEach((liElement) => {
-  liElement.addEventListener("click", liColorHandler);
-});
-
-function liColorHandler() {
-  if (this.style.backgroundColor === "pink") {
-    this.style.backgroundColor = "lightBlue";
-  } else {
-    this.style.backgroundColor = "pink";
-  }
 }
 
-function deleteButtonHandler() {
-  ul.removeChild(this.parentNode);
-  this.parentNode.removeChild(this);
+function deleteButtonHandler(deleteButton, li) {
+  deleteButton.addEventListener("click", () => {
+    console.log(ul.removeChild(li));
+  });
 }
-
-ul.prepend;
 
 //Task 4
 class Elem {
