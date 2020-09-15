@@ -68,19 +68,25 @@ const array = [
 ];
 
 array.map(function (item) {
-  const deleteButton = document.createElement("input");
-  const h1 = document.createElement("h1");
-  const p = document.createElement("p");
   const li = document.createElement("li");
   li.classList.add("liPinkColor");
 
   ul.appendChild(li);
 
+  liTextHandler(li, item);
   liColorHandler(li);
-  liTextHandler(li, item, h1, p);
-  liButtonHandler(li, deleteButton);
-  deleteButtonHandler(deleteButton, li);
+  liButtonHandler(li);
 });
+
+function liButtonHandler(li) {
+  const deleteButton = document.createElement("input");
+  deleteButton.setAttribute("type", "button");
+  deleteButton.setAttribute("value", "delete");
+  deleteButton.setAttribute("class", "deleteButton");
+  li.appendChild(deleteButton);
+
+  deleteButtonHandler(deleteButton, li);
+}
 
 function liColorHandler(li) {
   li.addEventListener("click", () => {
@@ -88,15 +94,10 @@ function liColorHandler(li) {
   });
 }
 
-function liButtonHandler(li, deleteButton) {
-  deleteButton.setAttribute("type", "button");
-  deleteButton.setAttribute("value", "delete");
-  deleteButton.setAttribute("class", "deleteButton");
+function liTextHandler(li, item) {
+  const h1 = document.createElement("h1");
+  const p = document.createElement("p");
 
-  li.appendChild(deleteButton);
-}
-
-function liTextHandler(li, item, h1, p) {
   h1.textContent = item.title;
   p.textContent = item.description;
 
@@ -106,7 +107,7 @@ function liTextHandler(li, item, h1, p) {
 
 function deleteButtonHandler(deleteButton, li) {
   deleteButton.addEventListener("click", () => {
-    console.log(ul.removeChild(li));
+    ul.removeChild(li);
   });
 }
 
