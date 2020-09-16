@@ -10,12 +10,8 @@ const ul = document.createElement("ul");
 input.setAttribute("placeholder", "Input number");
 inputResult.setAttribute("disabled", "disabled");
 
-rootDiv.appendChild(div);
-rootDiv.appendChild(elem);
-rootDiv.appendChild(ul);
-
-div.appendChild(input);
-div.appendChild(inputResult);
+rootDiv.append(div, elem, ul);
+div.append(input, inputResult);
 
 //Task 1
 
@@ -52,88 +48,95 @@ function hasClass() {
 }
 
 function addOrRemoveClass() {
-  if (hasClass()) {
-    elem.classList.toggle("www");
-  } else {
-    elem.classList.toggle("www");
-  }
+  elem.classList.toggle("www");
 }
 
 //Task 3
 
-const array = [
+const responseObjArray = [
   { id: 1, title: "first", description: "text1" },
   { id: 2, title: "second", description: "text2" },
   { id: 3, title: "third", description: "text3" },
 ];
 
-array.map(function (item) {
+const listItems = responseObjArray.map((item) => {
   const li = document.createElement("li");
   li.classList.add("liPinkColor");
 
-  ul.appendChild(li);
+  const headingOptions = {
+    tagName: "h1",
+    textContent: item.title,
+  };
 
-  liTextHandler(li, item);
-  liColorHandler(li);
-  liButtonHandler(li);
-});
+  const paragraphOptions = {
+    textContent: item.description,
+  };
 
-function liButtonHandler(li) {
-  const deleteButton = document.createElement("input");
-  deleteButton.setAttribute("type", "button");
-  deleteButton.setAttribute("value", "delete");
-  deleteButton.setAttribute("class", "deleteButton");
-  li.appendChild(deleteButton);
+  const buttonOptions = {
+    className: "deleteButton",
+    textContent: "delete",
+  };
 
-  deleteButtonHandler(deleteButton, li);
-}
+  const h1 = createHeading(headingOptions);
+  const p = createParagraph(paragraphOptions);
+  const btn = createButton(buttonOptions);
 
-function liColorHandler(li) {
   li.addEventListener("click", () => {
     li.classList.toggle("liLightBlueColor");
   });
-}
 
-function liTextHandler(li, item) {
-  const h1 = document.createElement("h1");
-  const p = document.createElement("p");
-
-  h1.textContent = item.title;
-  p.textContent = item.description;
-
-  li.appendChild(h1);
-  li.appendChild(p);
-}
-
-function deleteButtonHandler(deleteButton, li) {
-  deleteButton.addEventListener("click", () => {
-    ul.removeChild(li);
+  btn.addEventListener("click", () => {
+    li.parentNode.removeChild(li);
   });
+
+  li.append(h1, p, btn);
+  return li;
+});
+
+ul.append(...listItems);
+
+function createHeading({ tagName = "h1", textContent = "Title" } = options) {
+  const headingElement = document.createElement(tagName);
+  headingElement.textContent = textContent;
+  return headingElement;
+}
+
+function createParagraph({ textContent = "description" } = options) {
+  const pElement = document.createElement("p");
+  pElement.textContent = textContent;
+  return pElement;
+}
+
+function createButton({ className = "btn", textContent = "click" } = options) {
+  const btn = document.createElement("button");
+  btn.classList.add(className);
+  btn.textContent = textContent;
+  return btn;
 }
 
 //Task 4
 class Elem {
   constructor(selector) {
-    this.selector = document.querySelector(selector);
+    this._element = document.querySelector(selector);
   }
 
   html(string) {
-    this.selector.textContent = string;
+    this._element.textContent = string;
     return this;
   }
 
   append(string) {
-    this.selector.append(string);
+    this._element.append(string);
     return this;
   }
 
   prepend(string) {
-    this.selector.prepend(string);
+    this._element.prepend(string);
     return this;
   }
 
   attr(attribute, value) {
-    this.selector.setAttribute(attribute, value);
+    this._element.setAttribute(attribute, value);
     return this;
   }
 }
